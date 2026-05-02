@@ -1,3 +1,28 @@
+# UI (Vite/React)
+ui/node_modules/
+ui/dist/
+ui/.env.local
+ui/.env.*.local
+
+# PocketBase
+pb/pb_data/
+pb/pb_exec
+pb/pocketbase
+pb/pb_public/
+pb/storage/
+pb/.env
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
 # Logs
 logs
 *.log

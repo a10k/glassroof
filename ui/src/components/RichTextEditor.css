@@ -1,0 +1,84 @@
+.rich-text-editor-container {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  height: 100%;
+}
+
+.rich-text-editor {
+  flex: 1;
+  border: 1px solid #d9d9d9;
+  border-radius: 4px;
+  padding: 12px;
+  background: #fff;
+  overflow-y: auto;
+  font-size: 14px;
+  line-height: 1.6;
+  min-height: 200px;
+  text-align: left !important;
+}
+
+.rich-text-editor p {
+  margin: 8px 0;
+}
+
+.rich-text-editor strong {
+  font-weight: 600;
+}
+
+.rich-text-editor em {
+  font-style: italic;
+}
+
+.rich-text-editor h1,
+.rich-text-editor h2,
+.rich-text-editor h3 {
+  margin: 12px 0 8px 0;
+  font-weight: 600;
+}
+
+.rich-text-editor h1 {
+  font-size: 20px;
+}
+
+.rich-text-editor h2 {
+  font-size: 18px;
+}
+
+.rich-text-editor h3 {
+  font-size: 16px;
+}
+
+.rich-text-editor ul,
+.rich-text-editor ol {
+  margin: 8px 0 8px 24px;
+}
+
+.rich-text-editor li {
+  margin: 4px 0;
+}
+
+.editor-toolbar {
+  display: flex;
+  gap: 8px;
+  padding-top: 8px;
+  border-top: 1px solid #f0f0f0;
+}
+
+/* ProseMirror default styles */
+:global(.ProseMirror) {
+  outline: none;
+  text-align: left !important;
+}
+
+:global(.ProseMirror:focus) {
+  outline: none;
+}
+
+:global(.ProseMirror p.is-editor-empty:first-child::before) {
+  color: #adb5bd;
+  content: attr(data-placeholder);
+  float: left;
+  height: 0;
+  pointer-events: none;
+}
