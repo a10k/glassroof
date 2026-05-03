@@ -25,9 +25,19 @@ export default function MapView({
     map.current = new maplibregl.Map({
       container: mapContainer.current,
       style: 'https://basemaps.cartocdn.com/gl/positron-gl-style/style.json',
-      center: [-74.5, 40],
-      zoom: 12,
+      center: [-71.0583, 42.3603],
+      zoom: 13,
     });
+
+    map.current.addControl(new maplibregl.NavigationControl(), 'top-right');
+    map.current.addControl(
+      new maplibregl.GeolocateControl({
+        positionOptions: { enableHighAccuracy: true },
+        showAccuracyCircle: false,
+      }),
+      'top-right'
+    );
+    map.current.addControl(new maplibregl.ScaleControl(), 'bottom-left');
 
     map.current.on('load', () => map.current.resize());
 

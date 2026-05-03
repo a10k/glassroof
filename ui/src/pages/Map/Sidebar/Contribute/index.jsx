@@ -10,7 +10,7 @@ export default function Contribute({ tempPin, onAddListing }) {
   return (
     <Flex vertical gap={14} style={{ padding: '16px 20px', height: '100%' }}>
       <PinPreview tempPin={tempPin} onRemove={() => onAddListing(null)} />
-      <RichTextEditor initialContent={initialContent} onSubmit={onAddListing} disabled={!tempPin} />
+      <RichTextEditor initialContent={initialContent} disabled={!tempPin} />
     </Flex>
   );
 }

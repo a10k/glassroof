@@ -80,7 +80,7 @@ src/
 
 ✓ **No accounts** — Just drop a pin and add data
 ✓ **Anonymous by default** — No PII collected, no email required
-✓ **HashRouter** — Works with static hosting (PocketBase)
+✓ **HashRouter** — Works with static hosting (GitHub Pages)
 ✓ **Responsive** — Tabs adapt to mobile (bottom sheet)
 ✓ **MapLibre integration** — Open-source map rendering
 ✓ **Ant Design UI** — Clean, professional components

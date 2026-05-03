@@ -49,10 +49,9 @@ export default function Insights({ locationStatus, userLocation, onAllowLocation
           <Alert
             type="error"
             message="Location access denied"
-            description="You can still search for addresses manually or check your browser settings to enable location access."
+            description="You can still manually search for your location or check your browser settings to enable location access."
             showIcon
           />
-          <Input.Search placeholder="Search address..." />
         </>
       )}
     </Flex>

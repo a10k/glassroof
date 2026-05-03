@@ -20,7 +20,6 @@ export default function Sidebar({
       theme="light"
       style={{
         borderLeft: '1px solid #f0f0f0',
-        boxShadow: '-2px 0 8px rgba(0,0,0,0.06)',
         display: 'flex',
         flexDirection: 'column',
         overflow: 'auto',

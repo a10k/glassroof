@@ -3,16 +3,16 @@ import StarterKit from '@tiptap/starter-kit';
 import { Button, Flex } from 'antd';
 import './editor.css';
 
-export default function RichTextEditor({ initialContent, onSubmit, disabled }) {
+const GOOGLE_FORM_URL = 'https://forms.google.com'; // TODO: replace with actual form URL
+
+export default function RichTextEditor({ initialContent, disabled }) {
   const editor = useEditor({
     extensions: [StarterKit],
     content: initialContent,
   });
 
   const handleSubmit = () => {
-    if (!editor) return;
-    onSubmit(editor.getHTML());
-    editor.commands.clearContent();
+    window.open(GOOGLE_FORM_URL, '_blank', 'noopener,noreferrer');
   };
 
   if (!editor) return null;
