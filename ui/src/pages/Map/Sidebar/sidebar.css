@@ -1,0 +1,14 @@
+.ant-layout-sider-children {
+  display: flex;
+  flex-direction: column;
+}
+
+.map-tabs .ant-tabs-content-holder {
+  flex: 1;
+  overflow-y: auto;
+}
+
+.map-tabs .ant-tabs-content,
+.map-tabs .ant-tabs-tabpane {
+  height: 100%;
+}
