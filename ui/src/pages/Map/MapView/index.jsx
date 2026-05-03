@@ -7,17 +7,36 @@ import { createPinElement, createTempPinElement } from './Pin';
 
 const { Content } = Layout;
 
+const SHAPES_SOURCE_LAYER = 'shapes';
+
+function getTilesUrl() {
+  const base = import.meta.env.BASE_URL;
+  if (base.startsWith('/')) {
+    // Dev: Vite always resolves BASE_URL to an absolute path (e.g. '/')
+    return `${window.location.origin}${base}tiles/{z}/{x}/{y}.pbf`;
+  }
+  // Production build: BASE_URL is relative ('./'), resolve against the page URL
+  const resolved = new URL(base, window.location.href).href;
+  return `${resolved}tiles/{z}/{x}/{y}.pbf`;
+}
+
 export default function MapView({
   listings,
   isContributeActive,
-  userLocation,
   tempPin,
   onMapClick,
+  onFeaturesChange,
+  flyToRef,
 }) {
   const mapContainer = useRef(null);
   const map = useRef(null);
   const markersRef = useRef([]);
   const tempMarkerRef = useRef(null);
+  const onFeaturesChangeRef = useRef(onFeaturesChange);
+
+  useEffect(() => {
+    onFeaturesChangeRef.current = onFeaturesChange;
+  }, [onFeaturesChange]);
 
   useEffect(() => {
     if (map.current) return;
@@ -39,7 +58,55 @@ export default function MapView({
     );
     map.current.addControl(new maplibregl.ScaleControl(), 'bottom-left');
 
-    map.current.on('load', () => map.current.resize());
+    map.current.on('load', () => {
+      map.current.resize();
+
+      map.current.addSource('shapes', {
+        type: 'vector',
+        tiles: [getTilesUrl()],
+        minzoom: 10,
+        maxzoom: 16,
+      });
+
+      map.current.addLayer({
+        id: 'shapes-fill',
+        type: 'fill',
+        source: 'shapes',
+        'source-layer': SHAPES_SOURCE_LAYER,
+        paint: {
+          'fill-color': ['get', 'color'],
+          'fill-opacity': 0.35,
+        },
+      });
+
+      map.current.addLayer({
+        id: 'shapes-outline',
+        type: 'line',
+        source: 'shapes',
+        'source-layer': SHAPES_SOURCE_LAYER,
+        paint: {
+          'line-color': ['get', 'color'],
+          'line-width': 2,
+        },
+      });
+
+      if (flyToRef) {
+        flyToRef.current = (center, zoom) => map.current.flyTo({ center, zoom });
+      }
+    });
+
+    map.current.on('idle', () => {
+      if (!map.current || !onFeaturesChangeRef.current) return;
+      const features = map.current.queryRenderedFeatures({ layers: ['shapes-fill'] });
+      const seen = new Set();
+      const unique = features.filter((f) => {
+        const key = f.properties.id;
+        if (seen.has(key)) return false;
+        seen.add(key);
+        return true;
+      });
+      onFeaturesChangeRef.current(unique.map((f) => f.properties));
+    });
 
     return () => {
       if (map.current) {
@@ -48,11 +115,6 @@ export default function MapView({
       }
     };
   }, []);
-
-  useEffect(() => {
-    if (!map.current || !userLocation) return;
-    map.current.flyTo({ center: [userLocation.lng, userLocation.lat], zoom: 14 });
-  }, [userLocation]);
 
   useEffect(() => {
     if (!map.current) return;

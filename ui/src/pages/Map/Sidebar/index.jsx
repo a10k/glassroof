@@ -8,9 +8,8 @@ const { Sider } = Layout;
 export default function Sidebar({
   activeTab,
   onTabChange,
-  locationStatus,
-  userLocation,
-  onAllowLocation,
+  visibleFeatures,
+  onFlyToFeature,
   tempPin,
   onAddListing,
 }) {
@@ -36,11 +35,7 @@ export default function Sidebar({
             key: '1',
             label: 'Insights',
             children: (
-              <Insights
-                locationStatus={locationStatus}
-                userLocation={userLocation}
-                onAllowLocation={onAllowLocation}
-              />
+              <Insights visibleFeatures={visibleFeatures} onFlyToFeature={onFlyToFeature} />
             ),
           },
           {

@@ -1,59 +1,78 @@
-import { Button, Input, Spin, Flex, Typography, Alert } from 'antd';
-import { EnvironmentOutlined } from '@ant-design/icons';
+import { Flex, Typography, Button, Tooltip } from 'antd';
+import { AimOutlined } from '@ant-design/icons';
 
-const { Title, Paragraph } = Typography;
+const { Text, Paragraph } = Typography;
 
-export default function Insights({ locationStatus, userLocation, onAllowLocation }) {
+export default function Insights({ visibleFeatures = [], onFlyToFeature }) {
+  if (!visibleFeatures.length) {
+    return (
+      <Flex
+        vertical
+        align="center"
+        justify="center"
+        style={{ padding: '48px 24px', height: '100%' }}
+      >
+        <Text type="secondary" style={{ textAlign: 'center', lineHeight: 1.6 }}>
+          No areas in current view.
+          <br />
+          Pan or zoom the map to explore.
+        </Text>
+      </Flex>
+    );
+  }
+
   return (
-    <Flex vertical gap={16} style={{ padding: '16px 20px' }}>
-      <Title level={5} style={{ margin: 0 }}>
-        Your Location
-      </Title>
-      <Paragraph style={{ margin: 0, color: 'rgba(0,0,0,0.65)', lineHeight: 1.6 }}>
-        We use your location to show relevant rent data in your area. Your exact address is never
-        stored—only approximate coordinates to help you explore nearby listings.
-      </Paragraph>
-
-      {locationStatus === 'idle' && (
-        <Button
-          type="primary"
-          size="large"
-          icon={<EnvironmentOutlined />}
-          onClick={onAllowLocation}
-          block
+    <Flex vertical gap={0}>
+      <Text
+        type="secondary"
+        style={{
+          fontSize: 11,
+          padding: '10px 20px 6px',
+          textTransform: 'uppercase',
+          letterSpacing: '0.05em',
+        }}
+      >
+        {visibleFeatures.length} area{visibleFeatures.length !== 1 ? 's' : ''} in view
+      </Text>
+      {visibleFeatures.map((feature) => (
+        <Flex
+          key={feature.id}
+          align="flex-start"
+          gap={12}
+          style={{ padding: '12px 20px', borderBottom: '1px solid #f5f5f5' }}
         >
-          Allow My Location
-        </Button>
-      )}
-
-      {locationStatus === 'loading' && (
-        <Flex justify="center" style={{ padding: '24px 0' }}>
-          <Spin />
-        </Flex>
-      )}
-
-      {locationStatus === 'granted' && (
-        <Alert
-          type="success"
-          message="Location enabled"
-          description={
-            userLocation &&
-            `Lat: ${userLocation.lat.toFixed(4)}, Lng: ${userLocation.lng.toFixed(4)}`
-          }
-          showIcon
-        />
-      )}
-
-      {locationStatus === 'denied' && (
-        <>
-          <Alert
-            type="error"
-            message="Location access denied"
-            description="You can still manually search for your location or check your browser settings to enable location access."
-            showIcon
+          <div
+            style={{
+              width: 10,
+              height: 10,
+              borderRadius: 2,
+              backgroundColor: feature.color,
+              flexShrink: 0,
+              marginTop: 4,
+            }}
           />
-        </>
-      )}
+          <Flex vertical gap={2} style={{ flex: 1, minWidth: 0 }}>
+            <Text strong style={{ fontSize: 13 }}>
+              {feature.title}
+            </Text>
+            <Paragraph
+              style={{ margin: 0, fontSize: 12, color: 'rgba(0,0,0,0.55)' }}
+              ellipsis={{ rows: 2 }}
+            >
+              {feature.text}
+            </Paragraph>
+          </Flex>
+          <Tooltip title="Zoom to">
+            <Button
+              type="text"
+              size="small"
+              icon={<AimOutlined />}
+              onClick={() => onFlyToFeature([feature.center_lng, feature.center_lat], 16)}
+              style={{ flexShrink: 0, color: 'rgba(0,0,0,0.35)' }}
+            />
+          </Tooltip>
+        </Flex>
+      ))}
     </Flex>
   );
 }

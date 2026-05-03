@@ -1,0 +1,110 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "north-end-hanover-st",
+        "title": "Hanover St corridor",
+        "text": "1BR: $2,800–$3,400/mo · 2BR: $3,800–$4,600/mo. High demand due to walkability and restaurant scene. Expect bidding wars on anything under $3,000.",
+        "color": "#2563EB",
+        "center_lat": 42.3634,
+        "center_lng": -71.0547
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [[
+          [-71.0560, 42.3624],
+          [-71.0534, 42.3624],
+          [-71.0534, 42.3644],
+          [-71.0560, 42.3644],
+          [-71.0560, 42.3624]
+        ]]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "north-end-prince-st",
+        "title": "Prince St / North End core",
+        "text": "Studio: $2,200–$2,700/mo · 1BR: $2,900–$3,500/mo. Older brick walk-ups, few amenities. Premium for renovated units. Leases turn over fast in spring.",
+        "color": "#059669",
+        "center_lat": 42.3648,
+        "center_lng": -71.0534
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [[
+          [-71.0548, 42.3640],
+          [-71.0520, 42.3640],
+          [-71.0520, 42.3656],
+          [-71.0548, 42.3656],
+          [-71.0548, 42.3640]
+        ]]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "waterfront-commercial-wharf",
+        "title": "Commercial Wharf / Waterfront",
+        "text": "1BR: $3,500–$4,800/mo · 2BR: $5,200–$7,000/mo. Luxury condos and renovated loft conversions. Harbor views add 15–25% premium. Very low vacancy.",
+        "color": "#7C3AED",
+        "center_lat": 42.3606,
+        "center_lng": -71.0510
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [[
+          [-71.0530, 42.3597],
+          [-71.0490, 42.3597],
+          [-71.0490, 42.3615],
+          [-71.0530, 42.3615],
+          [-71.0530, 42.3597]
+        ]]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "govt-center-bowdoin",
+        "title": "Bowdoin / Govt Center",
+        "text": "Studio: $2,000–$2,500/mo · 1BR: $2,600–$3,200/mo. Mix of older stock and newer high-rises. More affordable than waterfront. Good T access keeps demand steady.",
+        "color": "#D97706",
+        "center_lat": 42.3601,
+        "center_lng": -71.0607
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [[
+          [-71.0625, 42.3591],
+          [-71.0589, 42.3591],
+          [-71.0589, 42.3611],
+          [-71.0625, 42.3611],
+          [-71.0625, 42.3591]
+        ]]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "north-end-prado-salem-st",
+        "title": "Salem St / Prado area",
+        "text": "1BR: $2,600–$3,200/mo · 2BR: $3,400–$4,200/mo. Quieter end of the North End. Fewer tourists, more locals. Units here tend to stay rented year to year.",
+        "color": "#DC2626",
+        "center_lat": 42.3640,
+        "center_lng": -71.0560
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [[
+          [-71.0575, 42.3633],
+          [-71.0545, 42.3633],
+          [-71.0545, 42.3648],
+          [-71.0575, 42.3648],
+          [-71.0575, 42.3633]
+        ]]
+      }
+    }
+  ]
+}

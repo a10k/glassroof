@@ -1,29 +1,16 @@
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { Layout } from 'antd';
 import MapView from './MapView';
 import Sidebar from './Sidebar';
 
 export default function Map() {
   const [activeTab, setActiveTab] = useState('1');
-  const [locationStatus, setLocationStatus] = useState('idle');
-  const [userLocation, setUserLocation] = useState(null);
   const [listings, setListings] = useState([]);
   const [tempPin, setTempPin] = useState(null);
+  const [visibleFeatures, setVisibleFeatures] = useState([]);
+  const flyToRef = useRef(null);
 
-  const handleAllowLocation = () => {
-    setLocationStatus('loading');
-    if ('geolocation' in navigator) {
-      navigator.geolocation.getCurrentPosition(
-        ({ coords: { latitude, longitude } }) => {
-          setUserLocation({ lat: latitude, lng: longitude });
-          setLocationStatus('granted');
-        },
-        () => setLocationStatus('denied')
-      );
-    } else {
-      setLocationStatus('denied');
-    }
-  };
+  const handleFlyToFeature = (center, zoom) => flyToRef.current?.(center, zoom);
 
   const handleAddListing = (htmlContent) => {
     if (htmlContent === null) {
@@ -46,16 +33,16 @@ export default function Map() {
       <MapView
         listings={listings}
         isContributeActive={activeTab === '2'}
-        userLocation={userLocation}
         tempPin={tempPin}
         onMapClick={setTempPin}
+        onFeaturesChange={setVisibleFeatures}
+        flyToRef={flyToRef}
       />
       <Sidebar
         activeTab={activeTab}
         onTabChange={setActiveTab}
-        locationStatus={locationStatus}
-        userLocation={userLocation}
-        onAllowLocation={handleAllowLocation}
+        visibleFeatures={visibleFeatures}
+        onFlyToFeature={handleFlyToFeature}
         tempPin={tempPin}
         onAddListing={handleAddListing}
       />
