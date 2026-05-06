@@ -1,21 +1,16 @@
 import { useEffect, useRef } from 'react';
-import { Layout } from 'antd';
 import maplibregl from 'maplibre-gl';
 import 'maplibre-gl/dist/maplibre-gl.css';
 import './popup.css';
 import { createPinElement, createTempPinElement } from './Pin';
-
-const { Content } = Layout;
 
 const SHAPES_SOURCE_LAYER = 'shapes';
 
 function getTilesUrl() {
   const base = import.meta.env.BASE_URL;
   if (base.startsWith('/')) {
-    // Dev: Vite always resolves BASE_URL to an absolute path (e.g. '/')
     return `${window.location.origin}${base}tiles/{z}/{x}/{y}.pbf`;
   }
-  // Production build: BASE_URL is relative ('./'), resolve against the page URL
   const resolved = new URL(base, window.location.href).href;
   return `${resolved}tiles/{z}/{x}/{y}.pbf`;
 }
@@ -26,6 +21,7 @@ export default function MapView({
   tempPin,
   onMapClick,
   onFeaturesChange,
+  onFeatureClick,
   flyToRef,
 }) {
   const mapContainer = useRef(null);
@@ -33,10 +29,12 @@ export default function MapView({
   const markersRef = useRef([]);
   const tempMarkerRef = useRef(null);
   const onFeaturesChangeRef = useRef(onFeaturesChange);
+  const onFeatureClickRef = useRef(onFeatureClick);
+  const isContributeActiveRef = useRef(isContributeActive);
 
-  useEffect(() => {
-    onFeaturesChangeRef.current = onFeaturesChange;
-  }, [onFeaturesChange]);
+  useEffect(() => { onFeaturesChangeRef.current = onFeaturesChange; }, [onFeaturesChange]);
+  useEffect(() => { onFeatureClickRef.current = onFeatureClick; }, [onFeatureClick]);
+  useEffect(() => { isContributeActiveRef.current = isContributeActive; }, [isContributeActive]);
 
   useEffect(() => {
     if (map.current) return;
@@ -48,14 +46,11 @@ export default function MapView({
       zoom: 13,
     });
 
-    map.current.addControl(new maplibregl.NavigationControl(), 'top-right');
-    map.current.addControl(
-      new maplibregl.GeolocateControl({
-        positionOptions: { enableHighAccuracy: true },
-        showAccuracyCircle: false,
-      }),
-      'top-right'
-    );
+    map.current.addControl(new maplibregl.GeolocateControl({
+      positionOptions: { enableHighAccuracy: true },
+      showAccuracyCircle: false,
+    }), 'bottom-right');
+    map.current.addControl(new maplibregl.NavigationControl(), 'bottom-right');
     map.current.addControl(new maplibregl.ScaleControl(), 'bottom-left');
 
     map.current.on('load', () => {
@@ -90,6 +85,23 @@ export default function MapView({
         },
       });
 
+      // Feature click → navigate to insights (unless in contribute mode)
+      map.current.on('click', 'shapes-fill', () => {
+        if (!isContributeActiveRef.current) {
+          onFeatureClickRef.current?.();
+        }
+      });
+
+      // Pointer cursor on hover
+      map.current.on('mouseenter', 'shapes-fill', () => {
+        if (!isContributeActiveRef.current) {
+          map.current.getCanvas().style.cursor = 'pointer';
+        }
+      });
+      map.current.on('mouseleave', 'shapes-fill', () => {
+        map.current.getCanvas().style.cursor = '';
+      });
+
       if (flyToRef) {
         flyToRef.current = (center, zoom) => map.current.flyTo({ center, zoom });
       }
@@ -119,26 +131,35 @@ export default function MapView({
   useEffect(() => {
     if (!map.current) return;
 
+    // Track whether a feature was clicked to suppress contribute-mode pin placement
+    let featureClicked = false;
+
+    const handleFeatureClick = () => {
+      featureClicked = true;
+      setTimeout(() => { featureClicked = false; }, 0);
+    };
+
     const handleMapClick = (e) => {
+      if (featureClicked) return;
       const { lng, lat } = e.lngLat;
       onMapClick({ lng, lat });
     };
 
     if (isContributeActive) {
+      map.current.on('click', 'shapes-fill', handleFeatureClick);
       map.current.on('click', handleMapClick);
     }
 
     return () => {
+      map.current?.off('click', 'shapes-fill', handleFeatureClick);
       map.current?.off('click', handleMapClick);
     };
   }, [isContributeActive, onMapClick]);
 
   useEffect(() => {
     if (!map.current) return;
-
     tempMarkerRef.current?.remove();
     tempMarkerRef.current = null;
-
     if (tempPin) {
       tempMarkerRef.current = new maplibregl.Marker({ element: createTempPinElement() })
         .setLngLat([tempPin.lng, tempPin.lat])
@@ -148,10 +169,8 @@ export default function MapView({
 
   useEffect(() => {
     if (!map.current) return;
-
     markersRef.current.forEach((marker) => marker.remove());
     markersRef.current = [];
-
     listings.forEach((listing) => {
       const marker = new maplibregl.Marker({ element: createPinElement() })
         .setLngLat([listing.lng, listing.lat])
@@ -161,14 +180,14 @@ export default function MapView({
           )
         )
         .addTo(map.current);
-
       markersRef.current.push(marker);
     });
   }, [listings]);
 
   return (
-    <Content style={{ position: 'relative', flex: 1, minHeight: 0 }}>
-      <div ref={mapContainer} style={{ position: 'absolute', inset: 0 }} />
-    </Content>
+    <div
+      ref={mapContainer}
+      style={{ position: 'absolute', inset: 0 }}
+    />
   );
 }
