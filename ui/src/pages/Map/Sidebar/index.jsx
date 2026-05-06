@@ -1,6 +1,6 @@
 import { useRef } from 'react';
 import { Tabs, Button, Typography, Flex, List, Divider } from 'antd';
-import { MenuOutlined, CloseOutlined } from '@ant-design/icons';
+import { LeftOutlined, RightOutlined } from '@ant-design/icons';
 import Insights from './Insights';
 import Contribute from './Contribute';
 import './sidebar.css';
@@ -20,13 +20,10 @@ function WelcomeTab({ onNavigate }) {
       gap={24}
       style={{ padding: '48px 24px', height: '100%', textAlign: 'center' }}
     >
-      <Title style={{ margin: 0, fontSize: 22 }}>
-        What does your neighbor actually pay?
-      </Title>
+      <Title style={{ margin: 0, fontSize: 22 }}>What does your neighbor actually pay?</Title>
       <Text type="secondary" style={{ fontSize: 15, lineHeight: 1.7 }}>
-        Glassroof is an anonymous rent transparency platform. Share your lease
-        details and discover real rental prices in your area — no personal
-        information required.
+        Glassroof is an anonymous rent transparency platform. Share your lease details and discover
+        real rental prices in your area — no personal information required.
       </Text>
       <Flex gap={12}>
         <Button type="primary" size="large" onClick={() => onNavigate('insights')}>
@@ -71,7 +68,9 @@ const PRIVACY_ITEMS = [
 function InfoTab() {
   return (
     <div style={{ padding: '16px 20px', overflowY: 'auto', height: '100%' }}>
-      <Title level={4} style={{ marginTop: 0 }}>Privacy Policy</Title>
+      <Title level={4} style={{ marginTop: 0 }}>
+        Privacy Policy
+      </Title>
       <Paragraph type="secondary" style={{ fontSize: 13 }}>
         Glassroof is built on the principle of privacy-first rent transparency.
       </Paragraph>
@@ -80,8 +79,16 @@ function InfoTab() {
         renderItem={({ label, desc }) => (
           <List.Item style={{ alignItems: 'flex-start', padding: '8px 0' }}>
             <List.Item.Meta
-              title={<Text strong style={{ fontSize: 13 }}>{label}</Text>}
-              description={<Text type="secondary" style={{ fontSize: 12 }}>{desc}</Text>}
+              title={
+                <Text strong style={{ fontSize: 13 }}>
+                  {label}
+                </Text>
+              }
+              description={
+                <Text type="secondary" style={{ fontSize: 12 }}>
+                  {desc}
+                </Text>
+              }
             />
           </List.Item>
         )}
@@ -142,73 +149,98 @@ export default function Sidebar({
 
   if (collapsed) {
     return (
-      <Button
-        icon={<MenuOutlined />}
+      <button
         onClick={onExpand}
         style={{
           position: 'absolute',
-          top: 12,
+          top: '50%',
           right: 12,
+          transform: 'translateY(-50%)',
           zIndex: 20,
-          width: 38,
-          height: 38,
+          width: 20,
+          height: 52,
           background: 'rgba(255,255,255,0.92)',
           backdropFilter: 'blur(4px)',
           WebkitBackdropFilter: 'blur(4px)',
-          border: '1px solid rgba(0,0,0,0.1)',
+          border: '1px solid rgba(0,0,0,0.12)',
           boxShadow: '0 2px 8px rgba(0,0,0,0.15)',
-          borderRadius: 8,
+          borderRadius: 6,
+          cursor: 'pointer',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
+          padding: 0,
         }}
-      />
+      >
+        <LeftOutlined style={{ fontSize: 10, color: 'rgba(0,0,0,0.45)' }} />
+      </button>
     );
   }
 
   return (
-    <div className="sidebar-panel" style={{ width }}>
-      <div className="sidebar-drag-handle" onMouseDown={handleDragStart} />
+    <div style={{ position: 'relative', height: '100%', flexShrink: 0 }}>
+      {/* Collapse button - floats outside the panel on its left edge */}
+      <button
+        onClick={onCollapse}
+        style={{
+          position: 'absolute',
+          left: -20,
+          top: '50%',
+          transform: 'translateY(-50%)',
+          zIndex: 20,
+          width: 20,
+          height: 52,
+          background: 'rgba(255,255,255,0.92)',
+          backdropFilter: 'blur(4px)',
+          WebkitBackdropFilter: 'blur(4px)',
+          border: '1px solid rgba(0,0,0,0.12)',
+          borderRight: 'none',
+          boxShadow: '-2px 0 8px rgba(0,0,0,0.1)',
+          borderRadius: '6px 0 0 6px',
+          cursor: 'pointer',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          padding: 0,
+        }}
+      >
+        <RightOutlined style={{ fontSize: 10, color: 'rgba(0,0,0,0.45)' }} />
+      </button>
 
-      <Tabs
-        activeKey={activeTab}
-        onChange={onTabChange}
-        className="map-tabs"
-        tabBarStyle={{ margin: 0, paddingInline: 12, paddingRight: 8 }}
-        tabBarExtraContent={
-          <Button
-            type="text"
-            size="small"
-            icon={<CloseOutlined />}
-            onClick={onCollapse}
-            style={{ color: 'rgba(0,0,0,0.4)', marginRight: 4 }}
-          />
-        }
-        items={[
-          {
-            key: 'welcome',
-            label: 'Welcome',
-            children: <WelcomeTab onNavigate={onTabChange} />,
-          },
-          {
-            key: 'insights',
-            label: 'Insights',
-            children: (
-              <Insights visibleFeatures={visibleFeatures} onFlyToFeature={onFlyToFeature} />
-            ),
-          },
-          {
-            key: 'contribute',
-            label: 'Contribute',
-            children: <Contribute tempPin={tempPin} onAddListing={onAddListing} />,
-          },
-          {
-            key: 'info',
-            label: 'Info',
-            children: <InfoTab />,
-          },
-        ]}
-      />
+      <div className="sidebar-panel" style={{ width }}>
+        <div className="sidebar-drag-handle" onMouseDown={handleDragStart} />
+
+        <Tabs
+          activeKey={activeTab}
+          onChange={onTabChange}
+          className="map-tabs"
+          tabBarStyle={{ margin: 0, paddingInline: 12 }}
+          items={[
+            {
+              key: 'welcome',
+              label: 'Welcome',
+              children: <WelcomeTab onNavigate={onTabChange} />,
+            },
+            {
+              key: 'insights',
+              label: 'Insights',
+              children: (
+                <Insights visibleFeatures={visibleFeatures} onFlyToFeature={onFlyToFeature} />
+              ),
+            },
+            {
+              key: 'contribute',
+              label: 'Contribute',
+              children: <Contribute tempPin={tempPin} onAddListing={onAddListing} />,
+            },
+            {
+              key: 'info',
+              label: 'Info',
+              children: <InfoTab />,
+            },
+          ]}
+        />
+      </div>
     </div>
   );
 }

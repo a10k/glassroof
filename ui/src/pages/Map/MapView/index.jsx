@@ -32,9 +32,15 @@ export default function MapView({
   const onFeatureClickRef = useRef(onFeatureClick);
   const isContributeActiveRef = useRef(isContributeActive);
 
-  useEffect(() => { onFeaturesChangeRef.current = onFeaturesChange; }, [onFeaturesChange]);
-  useEffect(() => { onFeatureClickRef.current = onFeatureClick; }, [onFeatureClick]);
-  useEffect(() => { isContributeActiveRef.current = isContributeActive; }, [isContributeActive]);
+  useEffect(() => {
+    onFeaturesChangeRef.current = onFeaturesChange;
+  }, [onFeaturesChange]);
+  useEffect(() => {
+    onFeatureClickRef.current = onFeatureClick;
+  }, [onFeatureClick]);
+  useEffect(() => {
+    isContributeActiveRef.current = isContributeActive;
+  }, [isContributeActive]);
 
   useEffect(() => {
     if (map.current) return;
@@ -46,11 +52,14 @@ export default function MapView({
       zoom: 13,
     });
 
-    map.current.addControl(new maplibregl.GeolocateControl({
-      positionOptions: { enableHighAccuracy: true },
-      showAccuracyCircle: false,
-    }), 'bottom-right');
-    map.current.addControl(new maplibregl.NavigationControl(), 'bottom-right');
+    map.current.addControl(new maplibregl.NavigationControl(), 'top-right');
+    map.current.addControl(
+      new maplibregl.GeolocateControl({
+        positionOptions: { enableHighAccuracy: true },
+        showAccuracyCircle: false,
+      }),
+      'top-right'
+    );
     map.current.addControl(new maplibregl.ScaleControl(), 'bottom-left');
 
     map.current.on('load', () => {
@@ -136,7 +145,9 @@ export default function MapView({
 
     const handleFeatureClick = () => {
       featureClicked = true;
-      setTimeout(() => { featureClicked = false; }, 0);
+      setTimeout(() => {
+        featureClicked = false;
+      }, 0);
     };
 
     const handleMapClick = (e) => {
@@ -184,10 +195,5 @@ export default function MapView({
     });
   }, [listings]);
 
-  return (
-    <div
-      ref={mapContainer}
-      style={{ position: 'absolute', inset: 0 }}
-    />
-  );
+  return <div ref={mapContainer} style={{ position: 'absolute', inset: 0 }} />;
 }

@@ -44,30 +44,40 @@ export default function Map() {
   };
 
   return (
-    <div style={{ position: 'relative', width: '100vw', height: '100vh', overflow: 'hidden' }}>
-      <MapView
-        listings={listings}
-        isContributeActive={activeTab === 'contribute'}
-        tempPin={tempPin}
-        onMapClick={setTempPin}
-        onFeaturesChange={setVisibleFeatures}
-        onFeatureClick={handleFeatureClick}
-        flyToRef={flyToRef}
-      />
+    <div
+      style={{
+        position: 'relative',
+        display: 'flex',
+        width: '100vw',
+        height: '100vh',
+        overflow: 'hidden',
+      }}
+    >
+      <div style={{ flex: 1, position: 'relative', minWidth: 0 }}>
+        <MapView
+          listings={listings}
+          isContributeActive={activeTab === 'contribute'}
+          tempPin={tempPin}
+          onMapClick={setTempPin}
+          onFeaturesChange={setVisibleFeatures}
+          onFeatureClick={handleFeatureClick}
+          flyToRef={flyToRef}
+        />
 
-      {/* Logo overlay */}
-      <div
-        style={{
-          position: 'absolute',
-          top: 14,
-          left: 14,
-          zIndex: 10,
-          pointerEvents: 'none',
-        }}
-      >
-        <Text strong style={{ fontSize: 16, color: '#129865', letterSpacing: '-0.02em' }}>
-          Glassroof
-        </Text>
+        {/* Logo overlay */}
+        <div
+          style={{
+            position: 'absolute',
+            top: 14,
+            left: 14,
+            zIndex: 10,
+            pointerEvents: 'none',
+          }}
+        >
+          <Text strong style={{ fontSize: 24, color: '#129865', letterSpacing: '-0.02em' }}>
+            Glassroof
+          </Text>
+        </div>
       </div>
 
       <Sidebar
