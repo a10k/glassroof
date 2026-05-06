@@ -4,6 +4,8 @@ ui/dist/
 ui/.env.local
 ui/.env.*.local
 
+.claude/
+
 # IDE
 .vscode/
 .idea/
