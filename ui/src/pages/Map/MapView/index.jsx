@@ -18,6 +18,7 @@ function getTilesUrl() {
 export default function MapView({
   listings,
   isContributeActive,
+  selectedId,
   tempPin,
   onMapClick,
   onFeaturesChange,
@@ -41,6 +42,13 @@ export default function MapView({
   useEffect(() => {
     isContributeActiveRef.current = isContributeActive;
   }, [isContributeActive]);
+
+  useEffect(() => {
+    if (!map.current) return;
+    const apply = () => map.current.setFilter('shapes-selected', ['==', 'id', selectedId ?? '']);
+    if (map.current.isStyleLoaded()) apply();
+    else map.current.once('load', apply);
+  }, [selectedId]);
 
   useEffect(() => {
     if (map.current) return;
@@ -78,40 +86,49 @@ export default function MapView({
         .slice(buildingTopIdx + 1)
         .find((l) => l.type === 'symbol')?.id;
 
-      map.current.addLayer({
-        id: 'shapes-fill',
-        type: 'fill',
-        source: 'shapes',
-        'source-layer': SHAPES_SOURCE_LAYER,
-        paint: {
-          'fill-color': ['get', 'color'],
-          'fill-opacity': 0.35,
+      map.current.addLayer(
+        {
+          id: 'shapes-fill',
+          type: 'fill',
+          source: 'shapes',
+          'source-layer': SHAPES_SOURCE_LAYER,
+          paint: {
+            'fill-color': ['get', 'color'],
+            'fill-opacity': 0.35,
+          },
         },
-      }, firstSymbolId);
+        firstSymbolId
+      );
 
-      map.current.addLayer({
-        id: 'shapes-outline',
-        type: 'line',
-        source: 'shapes',
-        'source-layer': SHAPES_SOURCE_LAYER,
-        paint: {
-          'line-color': ['get', 'color'],
-          'line-width': 2,
+      map.current.addLayer(
+        {
+          id: 'shapes-outline',
+          type: 'line',
+          source: 'shapes',
+          'source-layer': SHAPES_SOURCE_LAYER,
+          paint: {
+            'line-color': ['get', 'color'],
+            'line-width': 2,
+          },
         },
-      }, firstSymbolId);
+        firstSymbolId
+      );
 
-      map.current.addLayer({
-        id: 'shapes-selected',
-        type: 'line',
-        source: 'shapes',
-        'source-layer': SHAPES_SOURCE_LAYER,
-        filter: ['==', 'id', ''],
-        paint: {
-          'line-color': '#164CFF',
-          'line-width': 2.5,
-          'line-dasharray': [3, 2],
+      map.current.addLayer(
+        {
+          id: 'shapes-selected',
+          type: 'line',
+          source: 'shapes',
+          'source-layer': SHAPES_SOURCE_LAYER,
+          filter: ['==', 'id', ''],
+          paint: {
+            'line-color': '#164CFF',
+            'line-width': 2.5,
+            'line-dasharray': [3, 2],
+          },
         },
-      }, firstSymbolId);
+        firstSymbolId
+      );
 
       // Feature click → navigate to insights (unless in contribute mode)
       map.current.on('click', 'shapes-fill', (e) => {
@@ -133,7 +150,13 @@ export default function MapView({
       });
 
       if (flyToRef) {
-        flyToRef.current = (center, zoom) => map.current.flyTo({ center, zoom });
+        flyToRef.current = (target) => {
+          if (target.bounds) {
+            map.current.fitBounds(target.bounds, { padding: 60, maxZoom: 15 });
+          } else {
+            map.current.flyTo({ center: target.center, zoom: target.zoom });
+          }
+        };
       }
     });
 
@@ -147,7 +170,7 @@ export default function MapView({
         seen.add(key);
         return true;
       });
-      onFeaturesChangeRef.current(unique.map((f) => f.properties));
+      onFeaturesChangeRef.current(unique.map((f) => ({ ...f.properties, geometry: f.geometry })));
     });
 
     return () => {

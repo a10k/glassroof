@@ -1,9 +1,28 @@
+import { useEffect, useRef } from 'react';
 import { Flex, Typography, Button, Tooltip } from 'antd';
 import { AimOutlined } from '@ant-design/icons';
 
 const { Text, Paragraph } = Typography;
 
-export default function Insights({ visibleFeatures = [], selectedId, onFlyToFeature }) {
+function getGeomBounds(geometry) {
+  const coords = geometry?.coordinates?.[0];
+  if (!coords?.length) return null;
+  const lngs = coords.map((c) => c[0]);
+  const lats = coords.map((c) => c[1]);
+  return [
+    [Math.min(...lngs), Math.min(...lats)],
+    [Math.max(...lngs), Math.max(...lats)],
+  ];
+}
+
+export default function Insights({ visibleFeatures = [], selectedId, onSelect, onFlyToFeature }) {
+  const itemRefs = useRef({});
+
+  useEffect(() => {
+    if (selectedId && itemRefs.current[selectedId]) {
+      itemRefs.current[selectedId].scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
+  }, [selectedId]);
   if (!visibleFeatures.length) {
     return (
       <Flex
@@ -37,6 +56,9 @@ export default function Insights({ visibleFeatures = [], selectedId, onFlyToFeat
       {visibleFeatures.map((feature) => (
         <Flex
           key={feature.id}
+          ref={(el) => {
+            itemRefs.current[feature.id] = el;
+          }}
           align="flex-start"
           gap={12}
           style={{
@@ -74,7 +96,15 @@ export default function Insights({ visibleFeatures = [], selectedId, onFlyToFeat
               type="text"
               size="small"
               icon={<AimOutlined />}
-              onClick={() => onFlyToFeature([feature.center_lng, feature.center_lat], 16)}
+              onClick={() => {
+                onSelect?.(feature.id);
+                const bounds = getGeomBounds(feature.geometry);
+                onFlyToFeature(
+                  bounds
+                    ? { bounds }
+                    : { center: [feature.center_lng, feature.center_lat], zoom: 14 }
+                );
+              }}
               style={{ flexShrink: 0, color: 'rgba(0,0,0,0.35)' }}
             />
           </Tooltip>

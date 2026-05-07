@@ -21,7 +21,7 @@ export default function Map() {
   const [sidebarWidth, setSidebarWidth] = useState(SIDEBAR_DEFAULT_WIDTH);
   const flyToRef = useRef(null);
 
-  const handleFlyToFeature = (center, zoom) => flyToRef.current?.(center, zoom);
+  const handleFlyToFeature = (target) => flyToRef.current?.(target);
 
   const handleFeatureClick = (id) => {
     setSelectedId(id);
@@ -59,6 +59,7 @@ export default function Map() {
         <MapView
           listings={listings}
           isContributeActive={activeTab === 'contribute'}
+          selectedId={selectedId}
           tempPin={tempPin}
           onMapClick={setTempPin}
           onFeaturesChange={setVisibleFeatures}
@@ -92,6 +93,7 @@ export default function Map() {
         onTabChange={setActiveTab}
         visibleFeatures={visibleFeatures}
         selectedId={selectedId}
+        onSelect={setSelectedId}
         onFlyToFeature={handleFlyToFeature}
         tempPin={tempPin}
         onAddListing={handleAddListing}

@@ -120,6 +120,7 @@ export default function Sidebar({
   onTabChange,
   visibleFeatures,
   selectedId,
+  onSelect,
   onFlyToFeature,
   tempPin,
   onAddListing,
@@ -226,7 +227,12 @@ export default function Sidebar({
               key: 'insights',
               label: 'Insights',
               children: (
-                <Insights visibleFeatures={visibleFeatures} selectedId={selectedId} onFlyToFeature={onFlyToFeature} />
+                <Insights
+                  visibleFeatures={visibleFeatures}
+                  selectedId={selectedId}
+                  onSelect={onSelect}
+                  onFlyToFeature={onFlyToFeature}
+                />
               ),
             },
             {
