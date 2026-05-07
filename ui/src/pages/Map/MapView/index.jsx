@@ -72,6 +72,12 @@ export default function MapView({
         maxzoom: 16,
       });
 
+      const styleLayers = map.current.getStyle().layers;
+      const buildingTopIdx = styleLayers.findIndex((l) => l.id === 'building-top');
+      const firstSymbolId = styleLayers
+        .slice(buildingTopIdx + 1)
+        .find((l) => l.type === 'symbol')?.id;
+
       map.current.addLayer({
         id: 'shapes-fill',
         type: 'fill',
@@ -81,7 +87,7 @@ export default function MapView({
           'fill-color': ['get', 'color'],
           'fill-opacity': 0.35,
         },
-      });
+      }, firstSymbolId);
 
       map.current.addLayer({
         id: 'shapes-outline',
@@ -92,12 +98,27 @@ export default function MapView({
           'line-color': ['get', 'color'],
           'line-width': 2,
         },
-      });
+      }, firstSymbolId);
+
+      map.current.addLayer({
+        id: 'shapes-selected',
+        type: 'line',
+        source: 'shapes',
+        'source-layer': SHAPES_SOURCE_LAYER,
+        filter: ['==', 'id', ''],
+        paint: {
+          'line-color': '#164CFF',
+          'line-width': 2.5,
+          'line-dasharray': [3, 2],
+        },
+      }, firstSymbolId);
 
       // Feature click → navigate to insights (unless in contribute mode)
-      map.current.on('click', 'shapes-fill', () => {
+      map.current.on('click', 'shapes-fill', (e) => {
         if (!isContributeActiveRef.current) {
-          onFeatureClickRef.current?.();
+          const id = e.features?.[0]?.properties?.id ?? '';
+          map.current.setFilter('shapes-selected', ['==', 'id', id]);
+          onFeatureClickRef.current?.(id);
         }
       });
 

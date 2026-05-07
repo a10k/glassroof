@@ -3,7 +3,7 @@ import { AimOutlined } from '@ant-design/icons';
 
 const { Text, Paragraph } = Typography;
 
-export default function Insights({ visibleFeatures = [], onFlyToFeature }) {
+export default function Insights({ visibleFeatures = [], selectedId, onFlyToFeature }) {
   if (!visibleFeatures.length) {
     return (
       <Flex
@@ -39,7 +39,14 @@ export default function Insights({ visibleFeatures = [], onFlyToFeature }) {
           key={feature.id}
           align="flex-start"
           gap={12}
-          style={{ padding: '12px 20px', borderBottom: '1px solid #f5f5f5' }}
+          style={{
+            padding: '12px 20px',
+            borderBottom: '1px solid #f5f5f5',
+            ...(feature.id === selectedId && {
+              outline: '2px dashed #164CFF',
+              outlineOffset: '-2px',
+            }),
+          }}
         >
           <div
             style={{

@@ -16,13 +16,15 @@ export default function Map() {
   const [listings, setListings] = useState([]);
   const [tempPin, setTempPin] = useState(null);
   const [visibleFeatures, setVisibleFeatures] = useState([]);
+  const [selectedId, setSelectedId] = useState(null);
   const [sidebarCollapsed, setSidebarCollapsed] = useState(isMobile());
   const [sidebarWidth, setSidebarWidth] = useState(SIDEBAR_DEFAULT_WIDTH);
   const flyToRef = useRef(null);
 
   const handleFlyToFeature = (center, zoom) => flyToRef.current?.(center, zoom);
 
-  const handleFeatureClick = () => {
+  const handleFeatureClick = (id) => {
+    setSelectedId(id);
     setActiveTab('insights');
     setSidebarCollapsed(false);
   };
@@ -89,6 +91,7 @@ export default function Map() {
         activeTab={activeTab}
         onTabChange={setActiveTab}
         visibleFeatures={visibleFeatures}
+        selectedId={selectedId}
         onFlyToFeature={handleFlyToFeature}
         tempPin={tempPin}
         onAddListing={handleAddListing}
