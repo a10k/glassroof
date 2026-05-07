@@ -20,17 +20,17 @@ function WelcomeTab({ onNavigate }) {
       gap={24}
       style={{ padding: '48px 24px', height: '100%', textAlign: 'center' }}
     >
-      <Title style={{ margin: 0, fontSize: 22 }}>What does your neighbor actually pay?</Title>
+      <Title style={{ margin: 0, fontSize: 22 }}>The rent your neighbors won't discuss.</Title>
       <Text type="secondary" style={{ fontSize: 15, lineHeight: 1.7 }}>
-        Glassroof is an anonymous rent transparency platform. Share your lease details and discover
-        real rental prices in your area — no personal information required.
+        Glassroof surfaces real lease prices — anonymously contributed, geographically indexed.
+        No accounts. No personal data. Just signal.
       </Text>
       <Flex gap={12}>
-        <Button type="primary" size="large" onClick={() => onNavigate('insights')}>
-          Explore Insights
+        <Button type="primary" size="large" onClick={() => onNavigate('market')}>
+          Explore the market
         </Button>
-        <Button size="large" onClick={() => onNavigate('contribute')}>
-          Share Your Rent
+        <Button size="large" onClick={() => onNavigate('report')}>
+          Add your data
         </Button>
       </Flex>
     </Flex>
@@ -40,28 +40,28 @@ function WelcomeTab({ onNavigate }) {
 // ─── Info tab ─────────────────────────────────────────────────────────────────
 const PRIVACY_ITEMS = [
   {
-    label: 'No personal information collected',
-    desc: 'We never ask for your name, email, phone number, or any identifying information.',
+    label: 'Nothing that identifies you',
+    desc: 'No name, email, phone, or any identifier. We don\'t ask for it and have no use for it.',
   },
   {
-    label: 'Anonymous by default',
-    desc: 'All rent data is submitted and stored anonymously. Your exact address is never recorded.',
+    label: 'Anonymous by design',
+    desc: 'Submissions are stored without authorship. Your exact address is never recorded — only a map coordinate you choose.',
   },
   {
-    label: 'What we collect',
-    desc: 'Only the rent amount, unit type (studio/1BR/2BR/3BR+), lease start month/year, and optional notes.',
+    label: 'What we actually store',
+    desc: 'Rent amount, unit type, lease start date, and optional notes. That\'s the complete list.',
   },
   {
-    label: 'Location data',
-    desc: 'We store the coordinates you provide when dropping a pin. That location is used to display your submission on the map.',
+    label: 'Location precision',
+    desc: 'We store the pin you drop — used to plot your data on the map. Nothing else.',
   },
   {
-    label: 'No accounts required',
-    desc: 'Drop a pin, add rent, done. No sign-ups, no verification, no tracking.',
+    label: 'Zero friction',
+    desc: 'No accounts, no verification, no OAuth. Place a pin, fill in rent, submit.',
   },
   {
-    label: 'Data security',
-    desc: 'All data is encrypted in transit and at rest. We follow industry best practices for data protection.',
+    label: 'Standard security',
+    desc: 'All data encrypted in transit and at rest.',
   },
 ];
 
@@ -69,10 +69,10 @@ function InfoTab() {
   return (
     <div style={{ padding: '16px 20px', overflowY: 'auto', height: '100%' }}>
       <Title level={4} style={{ marginTop: 0 }}>
-        Privacy Policy
+        How it works
       </Title>
       <Paragraph type="secondary" style={{ fontSize: 13 }}>
-        Glassroof is built on the principle of privacy-first rent transparency.
+        Built with one constraint: no personal data, ever.
       </Paragraph>
       <List
         dataSource={PRIVACY_ITEMS}
@@ -220,12 +220,12 @@ export default function Sidebar({
           items={[
             {
               key: 'welcome',
-              label: 'Welcome',
+              label: 'Overview',
               children: <WelcomeTab onNavigate={onTabChange} />,
             },
             {
-              key: 'insights',
-              label: 'Insights',
+              key: 'market',
+              label: 'Market',
               children: (
                 <Insights
                   visibleFeatures={visibleFeatures}
@@ -236,13 +236,13 @@ export default function Sidebar({
               ),
             },
             {
-              key: 'contribute',
-              label: 'Contribute',
+              key: 'report',
+              label: 'Report',
               children: <Contribute tempPin={tempPin} onAddListing={onAddListing} />,
             },
             {
-              key: 'info',
-              label: 'Info',
+              key: 'about',
+              label: 'About',
               children: <InfoTab />,
             },
           ]}

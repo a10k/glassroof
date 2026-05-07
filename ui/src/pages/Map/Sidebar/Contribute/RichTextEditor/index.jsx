@@ -23,7 +23,7 @@ export default function RichTextEditor({ initialContent, disabled, onSubmit, res
       <EditorContent editor={editor} className="tiptap-editor" />
       <div style={{ borderTop: '1px solid #f0f0f0', padding: '8px 0 20px' }}>
         <Button type="primary" onClick={() => onSubmit(editor.getText())} disabled={disabled} block>
-          Submit Anonymously
+          Report anonymously
         </Button>
       </div>
     </Flex>

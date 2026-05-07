@@ -1,10 +1,10 @@
-## About This Submission
+## Your submission
 
-Glassroof lets you **anonymously** share rental information so others in your area can make more informed decisions. Your submission is reviewed internally before appearing on the heatmap. Fill in as much as you can — every detail helps.
+Help your neighbors understand what the market actually clears at. Fill in what you can — every data point improves the signal.
 
-## Unit Details
+## Unit
 
-**Unit type:** Studio / 1-bed / 2-bed / 3-bed+
+**Type:** Studio / 1BR / 2BR / 3BR+
 
 **Size:** sq ft
 
@@ -16,58 +16,58 @@ Glassroof lets you **anonymously** share rental information so others in your ar
 
 **Furnished:** Yes / No / Partially
 
-**Balcony or outdoor space:** Yes / No
+**Outdoor space:** Yes / No
 
-**Parking:** Included / Extra cost ($&nbsp;&nbsp;&nbsp;/mo) / None
+**Parking:** Included / Extra ($&nbsp;&nbsp;/mo) / None
 
-## Rent & Costs
+## Rent & costs
 
 **Monthly rent:** $
 
 **Utilities included:** Yes / No
 
-**If not included — approx. monthly utilities:** $
+**Approx. monthly utilities (if not included):** $
 
 **Internet included:** Yes / No
 
-**Other regular fees (pet, amenity, storage, etc.):** $
+**Other recurring fees (pet, amenity, storage):** $
 
 **Rent increased since move-in:** Yes / No — if yes, by $
 
 ## Lease
 
-**Lease start date:**
+**Start date:**
 
-**Lease length:** 12 months / Month-to-month / Other
+**Length:** 12 months / Month-to-month / Other
 
 **Renewal offered:** Yes / No / Unsure
 
-**Early exit / break clause:** Yes / No
+**Break clause:** Yes / No
 
-## Neighbourhood
+## Neighborhood
 
-**Overall neighbourhood rating (1–10):**
+**Overall rating (1–10):**
 
-**Noise level:** Quiet / Moderate / Loud
+**Noise:** Quiet / Moderate / Loud
 
 **Safety:** Very safe / Safe / Some concerns / Avoid
 
-**Nearby amenities (transit, grocery, parks):**
+**Nearby (transit, grocery, parks):**
 
-**What you love about the area:**
+**What you'd tell a friend:**
 
-**What could be better:**
+**What you wish you'd known:**
 
-## Building & Management
+## Building & management
 
 **Building condition:** Excellent / Good / Fair / Poor
 
-**Maintenance response time:** Same day / Within a week / Slow / Unresolved
+**Maintenance response:** Same day / Within a week / Slow / Unresolved
 
-**Landlord or management rating (1–10):**
+**Landlord / management rating (1–10):**
 
-**Any hidden fees or surprises:**
+**Hidden fees or surprises:**
 
-## Anything Else
+## Anything else
 
-Add any other details that would help a fellow renter — neighbour noise, building rules, what you wish you had known before signing.
+Add what you'd want to know before signing.

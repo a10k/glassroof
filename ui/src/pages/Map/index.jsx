@@ -25,7 +25,7 @@ export default function Map() {
 
   const handleFeatureClick = (id) => {
     setSelectedId(id);
-    setActiveTab('insights');
+    setActiveTab('market');
     setSidebarCollapsed(false);
   };
 
@@ -77,8 +77,8 @@ export default function Map() {
             pointerEvents: 'none',
           }}
         >
-          <Text strong style={{ fontSize: 24, color: '#129865', letterSpacing: '-0.02em' }}>
-            Glassroof
+          <Text strong style={{ fontSize: 20, color: '#000', letterSpacing: '0.08em', fontFamily: 'Geist Sans, sans-serif' }}>
+            GLASSROOF
           </Text>
         </div>
       </div>

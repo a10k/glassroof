@@ -32,9 +32,9 @@ export default function Insights({ visibleFeatures = [], selectedId, onSelect, o
         style={{ padding: '48px 24px', height: '100%' }}
       >
         <Text type="secondary" style={{ textAlign: 'center', lineHeight: 1.6 }}>
-          No areas in current view.
+          Nothing in frame yet.
           <br />
-          Pan or zoom the map to explore.
+          Pan or zoom to load market data.
         </Text>
       </Flex>
     );
@@ -51,7 +51,7 @@ export default function Insights({ visibleFeatures = [], selectedId, onSelect, o
           letterSpacing: '0.05em',
         }}
       >
-        {visibleFeatures.length} area{visibleFeatures.length !== 1 ? 's' : ''} in view
+        {visibleFeatures.length} neighborhood{visibleFeatures.length !== 1 ? 's' : ''} in frame
       </Text>
       {visibleFeatures.map((feature) => (
         <Flex
@@ -91,7 +91,7 @@ export default function Insights({ visibleFeatures = [], selectedId, onSelect, o
               {feature.text}
             </Paragraph>
           </Flex>
-          <Tooltip title="Zoom to">
+          <Tooltip title="Focus">
             <Button
               type="text"
               size="small"

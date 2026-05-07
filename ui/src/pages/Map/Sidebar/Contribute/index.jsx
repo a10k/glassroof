@@ -62,18 +62,18 @@ export default function Contribute({ tempPin, onAddListing }) {
         open={showModal}
         onOk={handleReset}
         onCancel={handleReset}
-        okText="Got it, start fresh"
+        okText="Done, add another"
         cancelButtonProps={{ style: { display: 'none' } }}
         closable={false}
       >
         <Flex vertical align="center" gap={12} style={{ padding: '8px 0' }}>
           <CheckCircleOutlined style={{ fontSize: 40, color: '#52c41a' }} />
           <Text strong style={{ fontSize: 16 }}>
-            Form opened in a new tab
+            Opened in a new tab.
           </Text>
           <Text type="secondary" style={{ textAlign: 'center', lineHeight: 1.6 }}>
-            Fill in the details and hit Submit there. Your location and notes are already
-            pre-filled. Click below to clear this form and add another contribution.
+            Your location and notes are pre-filled — just review and submit.
+            Come back here to log another entry.
           </Text>
         </Flex>
       </Modal>

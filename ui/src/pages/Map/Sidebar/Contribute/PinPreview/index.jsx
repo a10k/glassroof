@@ -49,7 +49,7 @@ export default function PinPreview({ tempPin, onRemove }) {
       >
         <EnvironmentOutlined style={{ fontSize: 18, color: 'rgba(0,0,0,0.25)' }} />
         <Text style={{ fontSize: 13, color: 'rgba(0,0,0,0.4)' }}>
-          Click anywhere on the map to drop a pin
+          Tap the map to set your location
         </Text>
       </Flex>
     );
@@ -69,7 +69,7 @@ export default function PinPreview({ tempPin, onRemove }) {
       <Flex align="center" justify="space-between">
         <Flex align="center" gap={7}>
           <EnvironmentFilled style={{ fontSize: 16, color: PIN_COLOR }} />
-          <Text style={{ fontSize: 13, fontWeight: 600, color: PIN_COLOR }}>Pin dropped</Text>
+          <Text style={{ fontSize: 13, fontWeight: 600, color: PIN_COLOR }}>Location set</Text>
         </Flex>
         <Button
           type="text"
