@@ -3,7 +3,11 @@
   font-size: 14px;
 }
 
-/* Push nav/geolocate controls above the attribution bar */
 .maplibregl-ctrl-bottom-right {
-  margin-bottom: 24px;
+  margin-bottom: 0;
+}
+
+.maplibregl-ctrl-attrib {
+  font-size: 10px !important;
+  margin: 0 4px 4px 0 !important;
 }

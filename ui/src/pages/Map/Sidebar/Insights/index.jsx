@@ -57,7 +57,7 @@ export default function Insights({ visibleFeatures = [], onFlyToFeature }) {
             </Text>
             <Paragraph
               style={{ margin: 0, fontSize: 12, color: 'rgba(0,0,0,0.55)' }}
-              ellipsis={{ rows: 2 }}
+              ellipsis={{ rows: 2, expandable: true, symbol: 'more' }}
             >
               {feature.text}
             </Paragraph>
