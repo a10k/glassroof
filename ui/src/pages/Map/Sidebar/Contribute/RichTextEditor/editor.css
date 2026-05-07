@@ -1,7 +1,7 @@
 .tiptap-editor {
   flex: 1;
-  border: 1px solid #d9d9d9;
-  border-radius: 4px;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
   padding: 12px;
   background: #fff;
   overflow-y: auto;

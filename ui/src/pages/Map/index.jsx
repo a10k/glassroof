@@ -1,9 +1,6 @@
 import { useState, useRef } from 'react';
-import { Typography } from 'antd';
 import MapView from './MapView';
 import Sidebar from './Sidebar';
-
-const { Text } = Typography;
 
 const SIDEBAR_DEFAULT_WIDTH = 380;
 
@@ -24,9 +21,15 @@ export default function Map() {
   const handleFlyToFeature = (target) => flyToRef.current?.(target);
 
   const handleFeatureClick = (id) => {
+    if (activeTab === 'report') return;
     setSelectedId(id);
     setActiveTab('market');
     setSidebarCollapsed(false);
+  };
+
+  const handleTabChange = (key) => {
+    setActiveTab(key);
+    if (key !== 'market') setSelectedId(null);
   };
 
   const handleAddListing = (htmlContent) => {
@@ -58,13 +61,15 @@ export default function Map() {
       <div style={{ flex: 1, position: 'relative', minWidth: 0 }}>
         <MapView
           listings={listings}
-          isContributeActive={activeTab === 'contribute'}
+          isContributeActive={activeTab === 'report'}
           selectedId={selectedId}
           tempPin={tempPin}
           onMapClick={setTempPin}
           onFeaturesChange={setVisibleFeatures}
           onFeatureClick={handleFeatureClick}
           flyToRef={flyToRef}
+          sidebarCollapsed={sidebarCollapsed}
+          onToggleSidebar={() => setSidebarCollapsed((c) => !c)}
         />
 
         {/* Logo overlay */}
@@ -77,20 +82,16 @@ export default function Map() {
             pointerEvents: 'none',
           }}
         >
-          <Text strong style={{ fontSize: 20, color: '#000', letterSpacing: '0.08em', fontFamily: 'Geist Sans, sans-serif' }}>
-            GLASSROOF
-          </Text>
+          <span style={{ fontSize: 20, fontWeight: 700, color: '#129865' }}>GLASSROOF</span>
         </div>
       </div>
 
       <Sidebar
         collapsed={sidebarCollapsed}
-        onCollapse={() => setSidebarCollapsed(true)}
-        onExpand={() => setSidebarCollapsed(false)}
         width={sidebarWidth}
         onWidthChange={setSidebarWidth}
         activeTab={activeTab}
-        onTabChange={setActiveTab}
+        onTabChange={handleTabChange}
         visibleFeatures={visibleFeatures}
         selectedId={selectedId}
         onSelect={setSelectedId}

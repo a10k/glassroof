@@ -6,6 +6,15 @@ import { createPinElement, createTempPinElement } from './Pin';
 
 const SHAPES_SOURCE_LAYER = 'shapes';
 
+const sidebarIcon = (collapsed) =>
+  `<svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <rect x="1.5" y="1.5" width="11" height="11" rx="2" stroke="currentColor" stroke-width="1.3"/>
+    <line x1="5" y1="1.5" x2="5" y2="12.5" stroke="currentColor" stroke-width="1.3"/>
+    ${collapsed
+      ? '<polyline points="6.5,5 8.5,7 6.5,9" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" fill="none"/>'
+      : '<polyline points="8.5,5 6.5,7 8.5,9" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" fill="none"/>'}
+  </svg>`;
+
 function getTilesUrl() {
   const base = import.meta.env.BASE_URL;
   if (base.startsWith('/')) {
@@ -24,6 +33,8 @@ export default function MapView({
   onFeaturesChange,
   onFeatureClick,
   flyToRef,
+  sidebarCollapsed,
+  onToggleSidebar,
 }) {
   const mapContainer = useRef(null);
   const map = useRef(null);
@@ -32,6 +43,8 @@ export default function MapView({
   const onFeaturesChangeRef = useRef(onFeaturesChange);
   const onFeatureClickRef = useRef(onFeatureClick);
   const isContributeActiveRef = useRef(isContributeActive);
+  const onToggleSidebarRef = useRef(onToggleSidebar);
+  const sidebarBtnRef = useRef(null);
 
   useEffect(() => {
     onFeaturesChangeRef.current = onFeaturesChange;
@@ -42,6 +55,9 @@ export default function MapView({
   useEffect(() => {
     isContributeActiveRef.current = isContributeActive;
   }, [isContributeActive]);
+  useEffect(() => {
+    onToggleSidebarRef.current = onToggleSidebar;
+  }, [onToggleSidebar]);
 
   useEffect(() => {
     if (!map.current) return;
@@ -49,6 +65,12 @@ export default function MapView({
     if (map.current.isStyleLoaded()) apply();
     else map.current.once('load', apply);
   }, [selectedId]);
+
+  useEffect(() => {
+    if (!sidebarBtnRef.current) return;
+    sidebarBtnRef.current.innerHTML = sidebarIcon(sidebarCollapsed);
+    sidebarBtnRef.current.title = sidebarCollapsed ? 'Show sidebar' : 'Hide sidebar';
+  }, [sidebarCollapsed]);
 
   useEffect(() => {
     if (map.current) return;
@@ -60,6 +82,28 @@ export default function MapView({
       zoom: 13,
     });
 
+    const sidebarControl = {
+      onAdd() {
+        const container = document.createElement('div');
+        container.className = 'maplibregl-ctrl maplibregl-ctrl-group';
+        const btn = document.createElement('button');
+        btn.title = 'Hide sidebar';
+        btn.innerHTML = sidebarIcon(false);
+        Object.assign(btn.style, {
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          color: '#129865',
+          cursor: 'pointer',
+        });
+        btn.addEventListener('click', () => onToggleSidebarRef.current?.());
+        container.appendChild(btn);
+        sidebarBtnRef.current = btn;
+        return container;
+      },
+      onRemove() {},
+    };
+    map.current.addControl(sidebarControl, 'top-right');
     map.current.addControl(new maplibregl.NavigationControl(), 'top-right');
     map.current.addControl(
       new maplibregl.GeolocateControl({
@@ -122,7 +166,7 @@ export default function MapView({
           'source-layer': SHAPES_SOURCE_LAYER,
           filter: ['==', 'id', ''],
           paint: {
-            'line-color': '#164CFF',
+            'line-color': '#129865',
             'line-width': 2.5,
             'line-dasharray': [3, 2],
           },
@@ -141,9 +185,7 @@ export default function MapView({
 
       // Pointer cursor on hover
       map.current.on('mouseenter', 'shapes-fill', () => {
-        if (!isContributeActiveRef.current) {
-          map.current.getCanvas().style.cursor = 'pointer';
-        }
+        map.current.getCanvas().style.cursor = isContributeActiveRef.current ? '' : 'pointer';
       });
       map.current.on('mouseleave', 'shapes-fill', () => {
         map.current.getCanvas().style.cursor = '';
@@ -184,29 +226,16 @@ export default function MapView({
   useEffect(() => {
     if (!map.current) return;
 
-    // Track whether a feature was clicked to suppress contribute-mode pin placement
-    let featureClicked = false;
-
-    const handleFeatureClick = () => {
-      featureClicked = true;
-      setTimeout(() => {
-        featureClicked = false;
-      }, 0);
-    };
-
     const handleMapClick = (e) => {
-      if (featureClicked) return;
       const { lng, lat } = e.lngLat;
       onMapClick({ lng, lat });
     };
 
     if (isContributeActive) {
-      map.current.on('click', 'shapes-fill', handleFeatureClick);
       map.current.on('click', handleMapClick);
     }
 
     return () => {
-      map.current?.off('click', 'shapes-fill', handleFeatureClick);
       map.current?.off('click', handleMapClick);
     };
   }, [isContributeActive, onMapClick]);

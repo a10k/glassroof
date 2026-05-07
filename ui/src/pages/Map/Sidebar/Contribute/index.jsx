@@ -1,26 +1,19 @@
 import { useState } from 'react';
-import { Flex, Modal, Typography } from 'antd';
-import { CheckCircleOutlined } from '@ant-design/icons';
+import Modal from '../../../../components/Modal';
+import Button from '../../../../components/Button';
 import templateMd from './template.md?raw';
 import { markdownToHtml } from './markdownToHtml';
 import PinPreview from './PinPreview';
 import RichTextEditor from './RichTextEditor';
 
-const { Text } = Typography;
-
 const initialContent = markdownToHtml(templateMd);
 
-// ─── Google Form config ───────────────────────────────────────────────────────
-// After creating the form, replace FORM_ID and the three entry IDs.
-// How to get entry IDs: open your form → ⋮ → "Get pre-filled link" → fill
-// dummy values → copy the URL → read the entry.XXXXXXXXX= param names.
 const FORM_ID = '1FAIpQLSeAVba3-NUR0hA1DtPu7fd3-KCQFT0m0VkOq-3YszFu_DnN0w';
 const ENTRY = {
   lat: 'entry.1783660073',
   lng: 'entry.744345063',
   notes: 'entry.44724644',
 };
-// ─────────────────────────────────────────────────────────────────────────────
 
 function buildFormUrl(lat, lng, notes) {
   const base = `https://docs.google.com/forms/d/e/${FORM_ID}/viewform`;
@@ -33,11 +26,25 @@ function buildFormUrl(lat, lng, notes) {
   return `${base}?${params}`;
 }
 
+const checkIcon = (
+  <svg width="40" height="40" viewBox="0 0 40 40" fill="none">
+    <circle cx="20" cy="20" r="18" stroke="#129865" strokeWidth="2" />
+    <path
+      d="M12 20l6 6 10-12"
+      stroke="#129865"
+      strokeWidth="2.2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+  </svg>
+);
+
 export default function Contribute({ tempPin, onAddListing }) {
   const [showModal, setShowModal] = useState(false);
   const [resetSignal, setResetSignal] = useState(0);
 
   const handleSubmit = (notesText) => {
+    if (!tempPin) return;
     const url = buildFormUrl(tempPin.lat, tempPin.lng, notesText);
     window.open(url, '_blank', 'noopener,noreferrer');
     setShowModal(true);
@@ -50,7 +57,15 @@ export default function Contribute({ tempPin, onAddListing }) {
   };
 
   return (
-    <Flex vertical gap={14} style={{ padding: '16px 20px', height: '100%' }}>
+    <div
+      style={{
+        display: 'flex',
+        flexDirection: 'column',
+        gap: 14,
+        padding: '16px 20px',
+        height: '100%',
+      }}
+    >
       <PinPreview tempPin={tempPin} onRemove={() => onAddListing(null)} />
       <RichTextEditor
         initialContent={initialContent}
@@ -58,25 +73,33 @@ export default function Contribute({ tempPin, onAddListing }) {
         onSubmit={handleSubmit}
         resetSignal={resetSignal}
       />
+
       <Modal
         open={showModal}
-        onOk={handleReset}
-        onCancel={handleReset}
-        okText="Done, add another"
-        cancelButtonProps={{ style: { display: 'none' } }}
-        closable={false}
+        onClose={handleReset}
+        footer={
+          <Button variant="primary" onClick={handleReset}>
+            Done, add another
+          </Button>
+        }
       >
-        <Flex vertical align="center" gap={12} style={{ padding: '8px 0' }}>
-          <CheckCircleOutlined style={{ fontSize: 40, color: '#52c41a' }} />
-          <Text strong style={{ fontSize: 16 }}>
-            Opened in a new tab.
-          </Text>
-          <Text type="secondary" style={{ textAlign: 'center', lineHeight: 1.6 }}>
-            Your location and notes are pre-filled — just review and submit.
-            Come back here to log another entry.
-          </Text>
-        </Flex>
+        <div
+          style={{
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            gap: 14,
+            textAlign: 'center',
+          }}
+        >
+          {checkIcon}
+          <p style={{ margin: 0, fontSize: 16, fontWeight: 700 }}>Opened in a new tab.</p>
+          <p style={{ margin: 0, fontSize: 13, color: 'rgba(0,0,0,0.5)', lineHeight: 1.6 }}>
+            Your location and notes are pre-filled — just review and submit. Come back here to log
+            another entry.
+          </p>
+        </div>
       </Modal>
-    </Flex>
+    </div>
   );
 }

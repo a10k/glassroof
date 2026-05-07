@@ -1,8 +1,49 @@
 import { useEffect, useRef } from 'react';
-import { Flex, Typography, Button, Tooltip } from 'antd';
-import { AimOutlined } from '@ant-design/icons';
+import Button from '../../../../components/Button';
+import ExpandableText from '../../../../components/ExpandableText';
 
-const { Text, Paragraph } = Typography;
+const aimIcon = (
+  <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+    <circle cx="7" cy="7" r="5.5" stroke="currentColor" strokeWidth="1.3" />
+    <circle cx="7" cy="7" r="1.5" fill="currentColor" />
+    <line
+      x1="7"
+      y1="1"
+      x2="7"
+      y2="3.5"
+      stroke="currentColor"
+      strokeWidth="1.3"
+      strokeLinecap="round"
+    />
+    <line
+      x1="7"
+      y1="10.5"
+      x2="7"
+      y2="13"
+      stroke="currentColor"
+      strokeWidth="1.3"
+      strokeLinecap="round"
+    />
+    <line
+      x1="1"
+      y1="7"
+      x2="3.5"
+      y2="7"
+      stroke="currentColor"
+      strokeWidth="1.3"
+      strokeLinecap="round"
+    />
+    <line
+      x1="10.5"
+      y1="7"
+      x2="13"
+      y2="7"
+      stroke="currentColor"
+      strokeWidth="1.3"
+      strokeLinecap="round"
+    />
+  </svg>
+);
 
 function getGeomBounds(geometry) {
   const coords = geometry?.coordinates?.[0];
@@ -23,49 +64,56 @@ export default function Insights({ visibleFeatures = [], selectedId, onSelect, o
       itemRefs.current[selectedId].scrollIntoView({ behavior: 'smooth', block: 'nearest' });
     }
   }, [selectedId]);
+
   if (!visibleFeatures.length) {
     return (
-      <Flex
-        vertical
-        align="center"
-        justify="center"
-        style={{ padding: '48px 24px', height: '100%' }}
+      <div
+        style={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          height: '100%',
+          padding: '48px 24px',
+          textAlign: 'center',
+        }}
       >
-        <Text type="secondary" style={{ textAlign: 'center', lineHeight: 1.6 }}>
+        <p style={{ color: 'rgba(0,0,0,0.4)', fontSize: 13, lineHeight: 1.6, margin: 0 }}>
           Nothing in frame yet.
           <br />
           Pan or zoom to load market data.
-        </Text>
-      </Flex>
+        </p>
+      </div>
     );
   }
 
   return (
-    <Flex vertical gap={0}>
-      <Text
-        type="secondary"
+    <div>
+      <p
         style={{
           fontSize: 11,
+          fontWeight: 600,
           padding: '10px 20px 6px',
+          color: 'rgba(0,0,0,0.35)',
           textTransform: 'uppercase',
-          letterSpacing: '0.05em',
+          margin: 0,
         }}
       >
         {visibleFeatures.length} neighborhood{visibleFeatures.length !== 1 ? 's' : ''} in frame
-      </Text>
+      </p>
       {visibleFeatures.map((feature) => (
-        <Flex
+        <div
           key={feature.id}
           ref={(el) => {
             itemRefs.current[feature.id] = el;
           }}
-          align="flex-start"
-          gap={12}
           style={{
+            display: 'flex',
+            alignItems: 'flex-start',
+            gap: 12,
             padding: '12px 20px',
-            borderBottom: '1px solid #f5f5f5',
+            borderBottom: '1px solid rgba(0,0,0,0.06)',
             ...(feature.id === selectedId && {
-              outline: '2px dashed #164CFF',
+              outline: '2px dashed #129865',
               outlineOffset: '-2px',
             }),
           }}
@@ -80,36 +128,29 @@ export default function Insights({ visibleFeatures = [], selectedId, onSelect, o
               marginTop: 4,
             }}
           />
-          <Flex vertical gap={2} style={{ flex: 1, minWidth: 0 }}>
-            <Text strong style={{ fontSize: 13 }}>
+          <div style={{ flex: 1, minWidth: 0 }}>
+            <p style={{ margin: '0 0 3px', fontSize: 13, fontWeight: 600, color: '#000' }}>
               {feature.title}
-            </Text>
-            <Paragraph
-              style={{ margin: 0, fontSize: 12, color: 'rgba(0,0,0,0.55)' }}
-              ellipsis={{ rows: 2, expandable: true, symbol: 'more' }}
-            >
+            </p>
+            <ExpandableText style={{ fontSize: 12, color: 'rgba(0,0,0,0.5)', lineHeight: 1.55 }}>
               {feature.text}
-            </Paragraph>
-          </Flex>
-          <Tooltip title="Focus">
-            <Button
-              type="text"
-              size="small"
-              icon={<AimOutlined />}
-              onClick={() => {
-                onSelect?.(feature.id);
-                const bounds = getGeomBounds(feature.geometry);
-                onFlyToFeature(
-                  bounds
-                    ? { bounds }
-                    : { center: [feature.center_lng, feature.center_lat], zoom: 14 }
-                );
-              }}
-              style={{ flexShrink: 0, color: 'rgba(0,0,0,0.35)' }}
-            />
-          </Tooltip>
-        </Flex>
+            </ExpandableText>
+          </div>
+          <Button
+            variant="text"
+            size="sm"
+            icon={aimIcon}
+            title="Focus"
+            onClick={() => {
+              onSelect?.(feature.id);
+              const bounds = getGeomBounds(feature.geometry);
+              onFlyToFeature(
+                bounds ? { bounds } : { center: [feature.center_lng, feature.center_lat], zoom: 14 }
+              );
+            }}
+          />
+        </div>
       ))}
-    </Flex>
+    </div>
   );
 }

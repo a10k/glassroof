@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { useEditor, EditorContent } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
-import { Button, Flex } from 'antd';
+import Button from '../../../../../components/Button';
 import './editor.css';
 
 export default function RichTextEditor({ initialContent, disabled, onSubmit, resetSignal }) {
@@ -19,13 +19,18 @@ export default function RichTextEditor({ initialContent, disabled, onSubmit, res
   if (!editor) return null;
 
   return (
-    <Flex vertical gap={12} style={{ flex: 1 }}>
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 12, flex: 1 }}>
       <EditorContent editor={editor} className="tiptap-editor" />
-      <div style={{ borderTop: '1px solid #f0f0f0', padding: '8px 0 20px' }}>
-        <Button type="primary" onClick={() => onSubmit(editor.getText())} disabled={disabled} block>
+      <div style={{ borderTop: '1px solid rgba(0,0,0,0.07)', padding: '8px 0 20px' }}>
+        <Button
+          variant="primary"
+          block
+          disabled={disabled}
+          onClick={() => onSubmit(editor.getText())}
+        >
           Report anonymously
         </Button>
       </div>
-    </Flex>
+    </div>
   );
 }
